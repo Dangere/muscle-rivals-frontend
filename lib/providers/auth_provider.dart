@@ -15,28 +15,28 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   Tokens? get tokens => _tokens;
 
-  // void expireAccessToken() {
-  //   if (_tokens == null) {
-  //     return;
-  //   }
+  void expireAccessToken() {
+    if (_tokens == null) {
+      return;
+    }
 
-  //   _tokens = _tokens!.copyWith(
-  //     accessToken:
-  //         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlZTk5ZjNjYy0wNmUwLTQwMjEtOGUyNS0zNWJlNmY4ZTUzZDUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiI5LzE0LzIwMjYgMTI6MDI6MjQgQU0iLCJleHAiOjE3ODkzNDQxNDQsImlzcyI6IlN5bmNvcmFCYWNrZW5kIiwiYXVkIjoiU3luY29yYUZyb250ZW5kIn0.DK_sOgpYxsLwADYfr8Fp0th2RsRGYhpVdUzLIJr0NJU',
-  //   );
-  // }
+    _tokens = _tokens!.copyWith(
+      accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5OTRkNmIwMi00MWE2LTQ1MjItYTBjYi1lY2VkNjE2MWQyZTMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InRlc3QxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiOS8xNy8yMDI2IDEwOjM3OjQyIEFNIiwiZXhwIjoxNzg5NjQxNDYyLCJpc3MiOiJTeW5jb3JhQmFja2VuZCIsImF1ZCI6IlN5bmNvcmFGcm9udGVuZCJ9.Qu1jCcd4TPXCs29nfyy_wVb5OSEc8V0Dv_C3v7kz6Eg',
+    );
+  }
 
-  // void expireAccessAndRefreshToken() {
-  //   if (_tokens == null) {
-  //     return;
-  //   }
+  void expireAccessAndRefreshToken() {
+    if (_tokens == null) {
+      return;
+    }
 
-  //   _tokens = _tokens!.copyWith(
-  //     refreshToken: 'OWqt7uaisnzrUSRbxsHWGhXmpZN7Yis55461aIJPVuY=',
-  //     accessToken:
-  //         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlZTk5ZjNjYy0wNmUwLTQwMjEtOGUyNS0zNWJlNmY4ZTUzZDUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiI5LzE0LzIwMjYgMTI6MDI6MjQgQU0iLCJleHAiOjE3ODkzNDQxNDQsImlzcyI6IlN5bmNvcmFCYWNrZW5kIiwiYXVkIjoiU3luY29yYUZyb250ZW5kIn0.DK_sOgpYxsLwADYfr8Fp0th2RsRGYhpVdUzLIJr0NJU',
-  //   );
-  // }
+    _tokens = _tokens!.copyWith(
+      refreshToken: 'OWqt7uaisnzrUSRbxsHWGhXmpZN7Yis55461aIJPVuY=',
+      accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5OTRkNmIwMi00MWE2LTQ1MjItYTBjYi1lY2VkNjE2MWQyZTMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InRlc3QxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiOS8xNy8yMDI2IDEwOjM3OjQyIEFNIiwiZXhwIjoxNzg5NjQxNDYyLCJpc3MiOiJTeW5jb3JhQmFja2VuZCIsImF1ZCI6IlN5bmNvcmFGcm9udGVuZCJ9.Qu1jCcd4TPXCs29nfyy_wVb5OSEc8V0Dv_C3v7kz6Eg',
+    );
+  }
 
   void loginWithEmailAndPassword({
     required String email,

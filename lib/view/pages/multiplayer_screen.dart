@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:muscle_rivals/enums/connection_status.dart';
+import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/providers/multiplayer_provider.dart';
-import 'package:signalr_netcore/hub_connection.dart';
+import 'package:muscle_rivals/utils/snack_bar_alerts.dart';
+import 'package:muscle_rivals/view/widgets/hub_connection_status.dart';
 
 class MultiplayerScreen extends ConsumerStatefulWidget {
   const MultiplayerScreen({super.key});
@@ -13,18 +14,36 @@ class MultiplayerScreen extends ConsumerStatefulWidget {
 }
 
 class _MultiplayerScreenState extends ConsumerState<MultiplayerScreen> {
+  void connectToHub() {
+    ref.read(multiplayerProvider.notifier).connectToHub();
+  }
+
+  @override
+  void initState() {
+    Future.microtask(() {
+      connectToHub();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    HubConnectionState connectionStatus = ref.watch(multiplayerProvider);
+    ref.listen(multiplayerProvider, (previous, next) {
+      if (next.error != null) {
+        ref.read(loggerProvider).e(next.error!);
+        SnackBarAlerts.showErrorSnackBar(next.error!, context);
+      }
+    });
 
-    Icon connectionIcon = switch (connectionStatus) {
-      HubConnectionState.Connected => const Icon(Icons.check),
-      HubConnectionState.Connecting => const Icon(Icons.sync),
-      HubConnectionState.Disconnected => const Icon(Icons.close),
-      HubConnectionState.Disconnecting => const Icon(Icons.sync),
-      HubConnectionState.Reconnecting => const Icon(Icons.sync),
-    };
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          HubConnectioStatus(),
 
-    return Placeholder();
+          ElevatedButton(onPressed: connectToHub, child: Icon(Icons.sync)),
+        ],
+      ),
+    );
   }
 }

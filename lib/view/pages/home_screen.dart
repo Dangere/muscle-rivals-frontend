@@ -23,6 +23,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ElevatedButton(onPressed: logoutButton, child: Icon(Icons.logout)),
+
+          ElevatedButton(
+            onPressed: () =>
+                ref.read(authProvider.notifier).expireAccessToken(),
+            child: Text("Expire access token"),
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                ref.read(authProvider.notifier).expireAccessAndRefreshToken(),
+            child: Text("Expire access and refresh tokens"),
+          ),
           ElevatedButton(
             onPressed: () => ref.read(authProvider.notifier).refreshTokens(),
             child: Text("Refresh tokens"),

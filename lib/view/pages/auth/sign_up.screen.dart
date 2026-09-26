@@ -11,15 +11,15 @@ class SignUpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void signup() {
+    void signup(int i) {
       ref
           .read(authProvider.notifier)
           .registerWithEmailAndPassword(
-            email: "user@gmail.com",
+            email: "user$i@gmail.com",
             password: "123123123",
             firstName: "test",
             lastName: "test",
-            username: "test",
+            username: "test$i",
           );
     }
 
@@ -35,7 +35,19 @@ class SignUpScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Sign up")),
       body: Center(
-        child: ElevatedButton(onPressed: signup, child: const Text("Sign up")),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () => signup(0),
+              child: const Text("Sign up"),
+            ),
+            ElevatedButton(
+              onPressed: () => signup(1),
+              child: const Text("Sign up"),
+            ),
+          ],
+        ),
       ),
     );
   }

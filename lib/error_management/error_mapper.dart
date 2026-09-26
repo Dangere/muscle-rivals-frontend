@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:muscle_rivals/error_management/app_error_code.dart';
+import 'package:signalr_netcore/errors.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 /// Maps [Exception]s to [AppErrorCode]
@@ -11,6 +12,10 @@ class ErrorMapper {
     if (e is DioException) return _mapDioError(e);
 
     if (e is TimeoutException) return AppErrorCode.DIO_SEND_TIMEOUT;
+
+    if (e is HttpError) {
+      return _mapHttpError(e);
+    }
 
     // if (_isFatalDbError(e)) return AppErrorCode.DATABASE_ERROR;
 
@@ -96,6 +101,27 @@ class ErrorMapper {
         return AppErrorCode.UNKNOWN;
       case DioExceptionType.transformTimeout:
         return AppErrorCode.DIO_TRANSFORM_TIMEOUT;
+    }
+  }
+
+  static AppErrorCode _mapHttpError(HttpError e) {
+    switch (e.statusCode) {
+      case 400:
+        return AppErrorCode.HTTP_BAD_REQUEST;
+      case 401:
+        return AppErrorCode.HTTP_UNAUTHORIZED;
+      case 403:
+        return AppErrorCode.HTTP_FORBIDDEN;
+      case 404:
+        return AppErrorCode.HTTP_NOT_FOUND;
+      case 408:
+        return AppErrorCode.HTTP_REQUEST_TIMEOUT;
+      case 422:
+        return AppErrorCode.HTTP_UNPROCESSABLE;
+      case 429:
+        return AppErrorCode.HTTP_TOO_MANY_REQUESTS;
+      default:
+        return AppErrorCode.HTTP_UNEXPECTED;
     }
   }
 }

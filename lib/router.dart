@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:muscle_rivals/models/game_match.dart';
 import 'package:muscle_rivals/providers/app_init_provider.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
+import 'package:muscle_rivals/providers/match_provider.dart';
 import 'package:muscle_rivals/view/layout_scaffold.dart';
 import 'package:muscle_rivals/view/pages/auth/sign_in_screen.dart';
 import 'package:muscle_rivals/view/pages/auth/sign_up.screen.dart';
 import 'package:muscle_rivals/view/pages/home_screen.dart';
+import 'package:muscle_rivals/view/pages/match_screen.dart';
 import 'package:muscle_rivals/view/pages/multiplayer_screen.dart';
 import 'package:muscle_rivals/view/pages/onboarding_screen.dart';
 import 'package:muscle_rivals/view/pages/splash_screen.dart';
@@ -18,6 +21,10 @@ class RouteNotifier extends Notifier<GoRouter> {
     bool isLogged = ref.watch(isLoggedProvider);
 
     Logger logger = ref.read(loggerProvider);
+
+    bool runningMatch = ref.watch(
+      matchProvider.select((value) => value != null),
+    );
 
     logger.w('Refreshing routes, isLogged: $isLogged');
 
@@ -104,6 +111,14 @@ class RouteNotifier extends Notifier<GoRouter> {
             ),
           ],
         ),
+
+        GoRoute(
+          name: 'match',
+          path: '/match',
+          builder: (context, state) {
+            return const MatchScreen();
+          },
+        ),
       ],
 
       redirect: (context, state) {
@@ -119,23 +134,28 @@ class RouteNotifier extends Notifier<GoRouter> {
           return currentPath == path;
         });
 
+        // If we are in a global path (accessed by logged in or logged out users, we let it pass)
         if (inGlobalPath) {
           return null;
         }
 
+        // If we are not logged in and we are in a logged in only path we redirect to splash screen
         if (!isLogged && !isLoggedOutPath) {
           logger.d(
             "You were on ${state.fullPath} and getting redirected to login page",
           );
           return '/splash-screen';
         }
-
+        // If we are logged in and we are in a logged out only path we redirect to home
         if (isLogged && isLoggedOutPath) {
           logger.d(
             "You were on ${state.fullPath} and getting redirected to dashboard",
           );
           return '/home';
         }
+
+        // If we have a match running we redirect to the match screen
+        if (runningMatch) return '/match';
 
         return null;
       },
