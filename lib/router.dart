@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
-import 'package:muscle_rivals/models/game_match.dart';
+import 'package:muscle_rivals/models/game/game_match.dart';
 import 'package:muscle_rivals/providers/app_init_provider.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';

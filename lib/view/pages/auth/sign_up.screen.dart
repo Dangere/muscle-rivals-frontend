@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muscle_rivals/error_management/error_mapper.dart';
-import 'package:muscle_rivals/models/auth_state.dart';
+import 'package:muscle_rivals/models/auth/auth_state.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/utils/snack_bar_alerts.dart';

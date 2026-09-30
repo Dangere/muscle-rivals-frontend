@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:muscle_rivals/enums/exercise_type.dart';
 import 'package:muscle_rivals/enums/match_state.dart';
-import 'package:muscle_rivals/models/user.dart';
+import 'package:muscle_rivals/models/auth/user.dart';
+import 'package:muscle_rivals/models/game/game_modes.dart';
 
 class GameMatch {
   final int roomId;
@@ -9,6 +10,7 @@ class GameMatch {
   final List<int> scores;
   final DateTime date;
   final ExerciseType exerciseType;
+  final GameMode gameMode;
 
   // Matches start paused
   final MatchState state;
@@ -18,8 +20,9 @@ class GameMatch {
     required this.players,
     required this.date,
     required this.exerciseType,
+    required this.gameMode,
     List<int>? scores,
-    this.state = MatchState.paused,
+    required this.state,
   }) : scores = List.from(scores ?? const [0, 0]);
 
   GameMatch setPlayerScore(int userId, int newScore) {
@@ -32,7 +35,9 @@ class GameMatch {
       players: players,
       date: date,
       exerciseType: exerciseType,
+      gameMode: gameMode,
       scores: newScores,
+      state: state,
     );
   }
 
@@ -42,17 +47,22 @@ class GameMatch {
       players: players,
       date: date,
       exerciseType: exerciseType,
+      gameMode: gameMode,
       scores: scores,
       state: pause ? MatchState.paused : MatchState.inProgress,
     );
   }
 
   factory GameMatch.fromJson(Map<String, dynamic> json) {
+    print(json);
+
     return GameMatch(
       roomId: json['roomId'],
       players: List<User>.from(json['players'].map((x) => User.fromJson(x))),
       date: DateTime.parse(json['creationDate']),
       exerciseType: ExerciseType.values[json['exerciseType']],
+      gameMode: GameMode.fromTypedJson(json['gameMode']),
+      state: MatchState.paused,
     );
   }
 

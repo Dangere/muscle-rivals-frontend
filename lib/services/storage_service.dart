@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:muscle_rivals/models/tokens.dart';
-import 'package:muscle_rivals/models/user.dart';
+import 'package:muscle_rivals/models/auth/tokens.dart';
+import 'package:muscle_rivals/models/auth/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {

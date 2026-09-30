@@ -1,6 +1,6 @@
-import 'package:muscle_rivals/models/tokens.dart';
-import 'package:muscle_rivals/models/user.dart';
-import 'package:muscle_rivals/models/user_preferences.dart';
+import 'package:muscle_rivals/models/auth/tokens.dart';
+import 'package:muscle_rivals/models/auth/user.dart';
+import 'package:muscle_rivals/models/auth/user_preferences.dart';
 
 class AuthResponseDTO {
   final User user;

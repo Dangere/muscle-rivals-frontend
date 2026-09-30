@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:muscle_rivals/models/tokens.dart';
+import 'package:muscle_rivals/models/auth/tokens.dart';
 import 'package:muscle_rivals/utils/result.dart';
 
 class AuthInterceptor extends Interceptor {

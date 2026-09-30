@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:muscle_rivals/models/auth_state.dart';
-import 'package:muscle_rivals/models/game_match.dart';
-import 'package:muscle_rivals/providers/auth_provider.dart';
+import 'package:muscle_rivals/models/game/game_match.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/providers/multiplayer_provider.dart';
 
@@ -92,10 +90,11 @@ class MatchNotifier extends Notifier<GameMatch?> {
 
     bool pause = arguments[0] as bool;
     state = state!.pause(pause);
-    if (pause)
+    if (pause) {
       ref.read(loggerProvider).i("Match paused");
-    else
+    } else {
       ref.read(loggerProvider).i("Match resumed");
+    }
   }
 
   @override

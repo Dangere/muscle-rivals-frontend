@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:muscle_rivals/constants.dart';
 import 'package:muscle_rivals/models/dtos/auth_response_dto.dart';
-import 'package:muscle_rivals/models/tokens.dart';
-import 'package:muscle_rivals/models/user_preferences.dart';
+import 'package:muscle_rivals/models/auth/tokens.dart';
+import 'package:muscle_rivals/models/auth/user_preferences.dart';
 
 /// Class used to do remote API CRUD operations for auth
 class AuthRepository {

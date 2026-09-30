@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:muscle_rivals/enums/match_state.dart';
-import 'package:muscle_rivals/models/game_match.dart';
+import 'package:muscle_rivals/models/game/game_match.dart';
 import 'package:muscle_rivals/providers/match_provider.dart';
 
 class MatchScreen extends ConsumerStatefulWidget {
@@ -37,6 +37,7 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
     }
 
     return Scaffold(
+      appBar: AppBar(title: Text(match.gameMode.toString())),
       body: Center(
         child: Container(
           color: match.state == MatchState.paused ? Colors.red : Colors.green,

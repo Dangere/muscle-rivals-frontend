@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muscle_rivals/error_management/app_error_code.dart';
-import 'package:muscle_rivals/models/auth_state.dart';
+import 'package:muscle_rivals/models/auth/auth_state.dart';
 import 'package:muscle_rivals/models/dtos/auth_response_dto.dart';
-import 'package:muscle_rivals/models/tokens.dart';
-import 'package:muscle_rivals/models/user.dart';
+import 'package:muscle_rivals/models/auth/tokens.dart';
+import 'package:muscle_rivals/models/auth/user.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/repositories/auth_repository.dart';
 import 'package:muscle_rivals/utils/result.dart';
