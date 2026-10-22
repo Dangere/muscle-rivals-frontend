@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:logging/logging.dart' as logging;
 import 'package:muscle_rivals/interceptors/auth_interceptor.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
 import 'package:muscle_rivals/services/storage_service.dart';
@@ -9,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Logger provider used to initialize the logger
 final loggerProvider = Provider<Logger>((ref) {
-  return Logger(
+  Logger appLogger = Logger(
     printer: PrettyPrinter(
       methodCount: 1, // Number of method calls to be displayed
       // errorMethodCount: 0, // Number of method calls if stacktrace is provided
@@ -19,6 +20,24 @@ final loggerProvider = Provider<Logger>((ref) {
       // noBoxingByDefault: true, // THIS removes the rounded borders/lines
     ),
   );
+
+  // logging.Logger.root.level = logging.Level.ALL;
+
+  logging.Logger.root.onRecord.listen((rec) {
+    final msg = '[${rec.loggerName}] ${rec.message}';
+
+    if (rec.level >= logging.Level.SEVERE) {
+      appLogger.e(msg, error: rec.error, stackTrace: rec.stackTrace);
+    } else if (rec.level >= logging.Level.WARNING) {
+      appLogger.w(msg);
+    } else if (rec.level >= logging.Level.INFO) {
+      appLogger.i(msg);
+    } else {
+      appLogger.d(msg);
+    }
+  });
+
+  return appLogger;
 });
 
 /// This is the authenticated dio instance, we make separate instances when we need to make unauthenticated requests

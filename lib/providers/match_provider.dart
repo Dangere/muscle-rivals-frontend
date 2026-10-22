@@ -2,18 +2,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muscle_rivals/models/game/game_match.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/providers/multiplayer_provider.dart';
+import 'package:signalr_netcore/hub_connection.dart';
 
 class MatchNotifier extends Notifier<GameMatch?> {
+  void debug_startTempMatch() {
+    state = GameMatch.temp();
+  }
+
   /// Quits match for player
   void quitMatch() {
     if (state == null) return;
 
-    try {
+    // TODO: Gaurd when hub connection fails in other calls
+    if (ref.read(hubProvider).state == HubConnectionState.Connected) {
       ref.read(hubProvider).send("QuitMatch");
       ref.read(loggerProvider).i("Player quit match");
-    } catch (e) {
-      ref.read(loggerProvider).e("Failed to quit match");
     }
+
     state = null;
   }
 
@@ -99,17 +104,24 @@ class MatchNotifier extends Notifier<GameMatch?> {
 
   @override
   build() {
-    ref.read(hubProvider).on("StartMatch", _startMatch);
-    ref.read(hubProvider).on("EndMatch", _endMatch);
-    ref.read(hubProvider).on("MatchConcluded", _concludeMatch);
+    ref.read(loggerProvider).i("Match provider initialized");
+    var hubConnection = ref.read(hubProvider);
 
-    ref.read(hubProvider).on("SetRep", (arguments) => _setRep(arguments));
-    ref.read(hubProvider).on("PauseGame", (arguments) => _pauseGame(arguments));
+    hubConnection.on("StartMatch", _startMatch);
+    hubConnection.on("EndMatch", _endMatch);
+    hubConnection.on("MatchConcluded", _concludeMatch);
+
+    hubConnection.on("SetRep", (arguments) => _setRep(arguments));
+    hubConnection.on("PauseGame", (arguments) => _pauseGame(arguments));
 
     return null;
   }
 }
 
-final matchProvider = NotifierProvider<MatchNotifier, GameMatch?>(
+final matchProvider = NotifierProvider.autoDispose<MatchNotifier, GameMatch?>(
   MatchNotifier.new,
 );
+
+final isMatchRunningProvider = Provider.autoDispose<bool>((ref) {
+  return ref.watch(matchProvider.select((state) => state != null));
+});

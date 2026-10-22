@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:muscle_rivals/constants.dart';
 import 'package:muscle_rivals/error_management/app_error_code.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
@@ -10,9 +11,26 @@ import 'package:muscle_rivals/utils/result.dart';
 import 'package:signalr_netcore/http_connection_options.dart';
 import 'package:signalr_netcore/hub_connection.dart';
 import 'package:signalr_netcore/hub_connection_builder.dart';
+import 'package:logging/logging.dart' as logging;
 
 class MultiplayerNotifier extends AsyncNotifier<void> {
+  late HubConnection hubConnection;
+
   Future<Result<void>> queueIntoMatchmaking() async {
+    if (state.isLoading)
+      return Result.canceled("Already queueing", StackTrace.current);
+
+    if (ref.read(hubProvider).state == HubConnectionState.Disconnected) {
+      await connectToHub();
+    }
+
+    // if (state.hasError) {
+    //   return Result.failureCode(
+    //     AppErrorCode.HTTP_BAD_REQUEST,
+    //     StackTrace.current,
+    //   );
+    // }
+
     return Result.wrapAsync(
       () async =>
           await ref.read(matchmakingRepositoryProvider).queueIntoMatchmaking(),
@@ -69,7 +87,7 @@ class MultiplayerNotifier extends AsyncNotifier<void> {
   }
 
   void _dispose() {
-    ref.read(hubProvider).stop();
+    hubConnection.stop();
   }
 
   @override
@@ -79,6 +97,8 @@ class MultiplayerNotifier extends AsyncNotifier<void> {
         _dispose();
       }
     });
+
+    hubConnection = ref.read(hubProvider);
 
     ref.onDispose(() {
       _dispose();
@@ -102,7 +122,7 @@ final matchmakingRepositoryProvider = Provider<MatchmakingRepository>((ref) {
 });
 
 final hubProvider = Provider<HubConnection>((ref) {
-  return HubConnectionBuilder()
+  HubConnection hubConnection = HubConnectionBuilder()
       .withUrl(
         "${Constants.BASE_HUB_URL}/game",
         // By default our backend allows connection to persists even if a token expires as long as it was valid at the first handshake
@@ -113,5 +133,12 @@ final hubProvider = Provider<HubConnection>((ref) {
         ),
       )
       .withAutomaticReconnect(retryDelays: [2000])
+      .configureLogging(logging.Logger("SignalR"))
       .build();
+
+  hubConnection.stateStream.listen((event) {
+    ref.read(loggerProvider).i("Hub connection state changed: $event");
+  });
+
+  return hubConnection;
 });

@@ -29,8 +29,10 @@ class _MultiplayerScreenState extends ConsumerState<MultiplayerScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen(multiplayerProvider, (previous, next) {
-      if (next.error != null) {
-        ref.read(loggerProvider).e(next.error!);
+      if (next.asError != null) {
+        ref
+            .read(loggerProvider)
+            .e("${next.error!}, stackTrace: ${next.stackTrace}");
         SnackBarAlerts.showErrorSnackBar(next.error!, context);
       }
     });

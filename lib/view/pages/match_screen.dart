@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:muscle_rivals/enums/match_state.dart';
 import 'package:muscle_rivals/models/game/game_match.dart';
+import 'package:muscle_rivals/providers/common_providers.dart';
 import 'package:muscle_rivals/providers/match_provider.dart';
+import 'package:muscle_rivals/providers/webrtc_provider.dart';
 
 class MatchScreen extends ConsumerStatefulWidget {
   const MatchScreen({super.key});
@@ -30,6 +33,8 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
   Widget build(BuildContext context) {
     GameMatch? match = ref.watch(matchProvider);
 
+    var videoStream = ref.watch(webRTCProvider);
+
     // If we at any point, have a null match (means it ended) we show a pop up and quit the match (this) screen
     if (match == null) {
       showEndMatchPopup();
@@ -40,7 +45,7 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
       appBar: AppBar(title: Text(match.gameMode.toString())),
       body: Center(
         child: Container(
-          color: match.state == MatchState.paused ? Colors.red : Colors.green,
+          // color: match.state == MatchState.paused ? Colors.red : Colors.green,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,6 +63,69 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
                     ),
                   ],
                 ),
+              ),
+
+              Expanded(
+                child: Column(
+                  children: [
+                    // Expanded(child: Container(color: Colors.blue)),
+                    // Expanded(child: Container(color: Colors.red)),
+
+                    Expanded(
+                      child: videoStream.when(
+                        data: (data) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                ),
+                                child: AspectRatio(
+                                  aspectRatio: 9 / 10,
+                                  child: RTCVideoView(
+                                    ref
+                                        .read(webRTCProvider.notifier)
+                                        .localRenderer,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                ),
+                                child: AspectRatio(
+                                  aspectRatio: 9 / 10,
+                                  child: RTCVideoView(
+                                    ref
+                                        .read(webRTCProvider.notifier)
+                                        .remoteRenderer,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Expanded(child: Container(color: Colors.red)),
+                            // Expanded(child: Container(color: Colors.blue)),
+                          ],
+                        ),
+                        error: (error, stackTrace) {
+                          ref.read(loggerProvider).e(error);
+                          return Icon(Icons.error);
+                        },
+                        loading: () => Icon(Icons.sync),
+                      ),
+                    ),
+                    // Temporary start video call button
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(webRTCProvider.notifier).startStream();
+                },
+                child: Text("Start Video"),
               ),
               ElevatedButton(onPressed: countRep, child: Text("Count rep")),
               ElevatedButton(onPressed: quitMatch, child: Text("Quit Match")),

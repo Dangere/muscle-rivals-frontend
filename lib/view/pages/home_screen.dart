@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
+import 'package:muscle_rivals/providers/common_providers.dart';
+import 'package:muscle_rivals/providers/match_provider.dart';
 import 'package:muscle_rivals/providers/multiplayer_provider.dart';
+import 'package:muscle_rivals/utils/snack_bar_alerts.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +20,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(multiplayerProvider, (previous, next) {
+      if (next.asError != null) {
+        ref
+            .read(loggerProvider)
+            .e("${next.error!}, Stacktrace: ${next.stackTrace}");
+        SnackBarAlerts.showErrorSnackBar(next.error!, context);
+      }
+    });
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,6 +54,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: () =>
                 ref.read(multiplayerProvider.notifier).queueIntoMatchmaking(),
             child: Text("Queue into matchmaking"),
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                ref.read(matchProvider.notifier).debug_startTempMatch(),
+            child: Text("Debug: Start empty match"),
           ),
         ],
       ),

@@ -66,6 +66,20 @@ class GameMatch {
     );
   }
 
+  factory GameMatch.temp() {
+    return GameMatch(
+      roomId: 0,
+      players: [User.guest("player"), User.guest("Opponent")],
+      date: DateTime.now(),
+      exerciseType: ExerciseType.squats,
+      gameMode: TimeLimitedGameMode(
+        maxLifeTimeMinutes: 5,
+        timeLimitSeconds: 50,
+      ),
+      state: MatchState.paused,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

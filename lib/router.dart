@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
-import 'package:muscle_rivals/models/game/game_match.dart';
 import 'package:muscle_rivals/providers/app_init_provider.dart';
 import 'package:muscle_rivals/providers/auth_provider.dart';
 import 'package:muscle_rivals/providers/common_providers.dart';
@@ -22,9 +21,7 @@ class RouteNotifier extends Notifier<GoRouter> {
 
     Logger logger = ref.read(loggerProvider);
 
-    bool runningMatch = ref.watch(
-      matchProvider.select((value) => value != null),
-    );
+    bool isMatchRunning = ref.watch(isMatchRunningProvider);
 
     logger.w('Refreshing routes, isLogged: $isLogged');
 
@@ -155,7 +152,7 @@ class RouteNotifier extends Notifier<GoRouter> {
         }
 
         // If we have a match running we redirect to the match screen
-        if (runningMatch) return '/match';
+        if (isMatchRunning) return '/match';
 
         return null;
       },
