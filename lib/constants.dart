@@ -6,7 +6,7 @@ class Constants {
   /// http://10.0.2.2:5000/api
 
   static String BASE_URL = kDebugMode
-      ? "http:///192.168.1.28:5000"
+      ? "http://192.168.1.28:5000"
       : "https://musclerivals.runasp.net";
 
   /// The base URL of the API

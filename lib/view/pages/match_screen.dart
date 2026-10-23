@@ -81,13 +81,10 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(width: 5),
                                 ),
-                                child: AspectRatio(
-                                  aspectRatio: 9 / 10,
-                                  child: RTCVideoView(
-                                    ref
-                                        .read(webRTCProvider.notifier)
-                                        .localRenderer,
-                                  ),
+                                child: RTCVideoView(
+                                  ref
+                                      .read(webRTCProvider.notifier)
+                                      .localRenderer,
                                 ),
                               ),
                             ),
@@ -96,13 +93,10 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(width: 5),
                                 ),
-                                child: AspectRatio(
-                                  aspectRatio: 9 / 10,
-                                  child: RTCVideoView(
-                                    ref
-                                        .read(webRTCProvider.notifier)
-                                        .remoteRenderer,
-                                  ),
+                                child: RTCVideoView(
+                                  ref
+                                      .read(webRTCProvider.notifier)
+                                      .remoteRenderer,
                                 ),
                               ),
                             ),

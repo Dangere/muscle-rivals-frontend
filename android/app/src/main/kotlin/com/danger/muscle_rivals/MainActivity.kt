@@ -1,4 +1,4 @@
-package com.example.muscle_rivals
+package com.danger.muscle_rivals
 
 import io.flutter.embedding.android.FlutterActivity
 
